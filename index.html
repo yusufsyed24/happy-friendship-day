@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Friendship Day Card</title>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Concert+One|Pacifico');
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       background: radial-gradient(ellipse at center, rgba(83,40,188,1) 0%,rgba(44,17,141,1) 100%);
       perspective: 1000px;
       display: flex;
       transform-style: preserve-3d;
-      font-family: "Pacifico",cursive;
+      font-family: "Pacifico", cursive;
       height: 100vh;
       margin: 0;
       overflow: hidden;
+      touch-action: manipulation;
     }
     
     .card {
-      top: 20vh;
       pointer-events: none;
       transform: translateZ(7em);
-      padding: 30px;
+      padding: 20px;
       background: linear-gradient(to bottom, #020333 0%,#020333 75%,#ffffff 75%,#ffffff 100%);
       border-radius: 5px;
-      width: 400px;
-      height: 250px;
+      width: 90%;
+      max-width: 400px;
+      height: auto;
+      min-height: 250px;
       margin: auto;
       transform-style: preserve-3d;
       backface-visibility: hidden;
@@ -46,22 +54,24 @@
     
     .card .card-content {
       margin: auto;
-      text-align:center;
+      text-align: center;
       transform-style: preserve-3d;
+      width: 100%;
     }
     
     .card h1 {
       transform: translateZ(100px);
       color: #e0e0c8;
-      font-size: 2.7em;
+      font-size: clamp(1.5rem, 6vw, 2.7rem);
       font-weight: 400;
       margin: 0;
+      line-height: 1.2;
     }
     
     .card p {
       transform: translateZ(50px);
       color: #dc7532;
-      font-size: 1.7em;
+      font-size: clamp(1rem, 4vw, 1.7rem);
       display: block;
       margin: 10px 0;
     }
@@ -69,13 +79,13 @@
     .card .related {
       transform: translateZ(80px);
       color: #c04f87;
-      font-size: 1.7em;
+      font-size: clamp(1rem, 4vw, 1.7rem);
       font-family: 'Concert One', cursive;
       font-weight: 400;
     }
     
     .card a {
-      color:#dc7532;
+      color: #dc7532;
       pointer-events: auto;
     }
     
@@ -83,12 +93,15 @@
       position: fixed;
       width: 5vmin;
       height: 5vmin;
+      min-width: 20px;
+      min-height: 20px;
       border-radius: 50%;
       animation-name: explosion;
       animation-iteration-count: infinite;
       animation-direction: reverse;
       animation-timing-function: cubic-bezier(0.84, 0.02, 1, 1);
       opacity: 0.7;
+      will-change: transform;
     }
     
     /* Individual bokeh elements with different colors and positions */
@@ -100,19 +113,33 @@
     bokeh:nth-child(6) { background-color: #FCE38A; transform: translate(20vw, 80vh); animation-duration: 4.2s; animation-delay: -0.5s; }
     bokeh:nth-child(7) { background-color: #EAFFD0; transform: translate(40vw, 10vh); animation-duration: 3.8s; animation-delay: -1.8s; }
     bokeh:nth-child(8) { background-color: #95E1D3; transform: translate(60vw, 40vh); animation-duration: 4.7s; animation-delay: -3.2s; }
-    bokeh:nth-child(9) { background-color: #F38181; transform: translate(90vw, 20vh); animation-duration: 3.1s; animation-delay: -2.1s; }
-    bokeh:nth-child(10) { background-color: #FCE38A; transform: translate(15vw, 65vh); animation-duration: 4.3s; animation-delay: -1.3s; }
     
     @keyframes explosion {
       0% { opacity: 0; }
       70% { opacity: 1; }
       100% { transform: translate(50vw, 50vh); }
     }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 600px) {
+      .card {
+        padding: 15px;
+      }
+      
+      bokeh {
+        width: 4vmin;
+        height: 4vmin;
+      }
+    }
+
+    @media (max-height: 500px) {
+      .card {
+        transform: translateZ(7em) scale(0.8);
+      }
+    }
   </style>
 </head>
 <body>
-  <bokeh></bokeh>
-  <bokeh></bokeh>
   <bokeh></bokeh>
   <bokeh></bokeh>
   <bokeh></bokeh>
@@ -126,17 +153,65 @@
     <div class="card-content">
       <h1>Happy Friendship Day 🎉</h1>
       <p class="related">🌟 To all my friends 🌟</p>
-      <p><small>by <a href="https://github.com/yusufsyed24" target="_blank">Syed Yusuf Hussaini</a> </small></p>
+      <p><small>by <a href="https://github.com/yusufsyed24" target="_blank">Syed Yusuf Hussaini</a></small></p>
     </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    var card = $(".card");
-    $(document).on("mousemove",function(e) {  
-      var ax = -($(window).innerWidth()/2- e.pageX)/20;
-      var ay = ($(window).innerHeight()/2- e.pageY)/10;
-      card.attr("style", "transform: rotateY("+ax+"deg) rotateX("+ay+"deg) translateZ(7em)");
+    $(document).ready(function() {
+      var card = $(".card");
+      var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
+      
+      // Handle both mouse and touch events
+      function updateCardPosition(e) {
+        var posX, posY;
+        
+        if (e.type.includes('touch')) {
+          var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+          posX = touch.pageX;
+          posY = touch.pageY;
+        } else {
+          posX = e.pageX;
+          posY = e.pageY;
+        }
+        
+        var ax = -($(window).innerWidth()/2 - posX)/20;
+        var ay = ($(window).innerHeight()/2 - posY)/10;
+        
+        // Limit rotation for mobile devices
+        if (isTouchDevice) {
+          ax = Math.max(-15, Math.min(15, ax));
+          ay = Math.max(-15, Math.min(15, ay));
+        }
+        
+        card.css("transform", "rotateY("+ax+"deg) rotateX("+ay+"deg) translateZ(7em)");
+      }
+      
+      // Add event listeners for both mouse and touch
+      $(document).on("mousemove", updateCardPosition);
+      $(document).on("touchmove", updateCardPosition);
+      
+      // Reset position when touch ends
+      $(document).on("touchend", function() {
+        card.css("transform", "rotateY(0deg) rotateX(0deg) translateZ(7em)");
+      });
+      
+      // Handle device orientation for mobile
+      if (window.DeviceOrientationEvent && isTouchDevice) {
+        window.addEventListener('deviceorientation', function(e) {
+          var beta = e.beta;  // -180 to 180 (front/back tilt)
+          var gamma = e.gamma; // -90 to 90 (left/right tilt)
+          
+          if (beta !== null && gamma !== null) {
+            // Scale down the effect for more subtle movement
+            var ax = gamma / 4;
+            var ay = (beta - 90) / 8;
+            
+            card.css("transform", "rotateY("+ax+"deg) rotateX("+ay+"deg) translateZ(7em)");
+          }
+        });
+      }
     });
   </script>
 </body>
