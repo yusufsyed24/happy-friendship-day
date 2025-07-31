@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Friendship Day Card</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Concert+One|Pacifico');
+
+    body {
+      background: radial-gradient(ellipse at center, rgba(83,40,188,1) 0%,rgba(44,17,141,1) 100%);
+      perspective: 1000px;
+      display: flex;
+      transform-style: preserve-3d;
+      font-family: "Pacifico",cursive;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    
+    .card {
+      top: 20vh;
+      pointer-events: none;
+      transform: translateZ(7em);
+      padding: 30px;
+      background: linear-gradient(to bottom, #020333 0%,#020333 75%,#ffffff 75%,#ffffff 100%);
+      border-radius: 5px;
+      width: 400px;
+      height: 250px;
+      margin: auto;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      display: flex;
+      box-shadow: 0 0 5px rgba(0,0,0,.1);
+      position: relative;
+    }
+    
+    .card:after {
+      content:" ";
+      position: absolute;
+      width: 100%;
+      height: 10px;
+      border-radius: 50%;
+      left:0;
+      bottom:-50px;
+      box-shadow: 0 30px 20px rgba(0,0,0,.3);
+    }
+    
+    .card .card-content {
+      margin: auto;
+      text-align:center;
+      transform-style: preserve-3d;
+    }
+    
+    .card h1 {
+      transform: translateZ(100px);
+      color: #e0e0c8;
+      font-size: 2.7em;
+      font-weight: 400;
+      margin: 0;
+    }
+    
+    .card p {
+      transform: translateZ(50px);
+      color: #dc7532;
+      font-size: 1.7em;
+      display: block;
+      margin: 10px 0;
+    }
+    
+    .card .related {
+      transform: translateZ(80px);
+      color: #c04f87;
+      font-size: 1.7em;
+      font-family: 'Concert One', cursive;
+      font-weight: 400;
+    }
+    
+    .card a {
+      color:#dc7532;
+      pointer-events: auto;
+    }
+    
+    bokeh {
+      position: fixed;
+      width: 5vmin;
+      height: 5vmin;
+      border-radius: 50%;
+      animation-name: explosion;
+      animation-iteration-count: infinite;
+      animation-direction: reverse;
+      animation-timing-function: cubic-bezier(0.84, 0.02, 1, 1);
+      opacity: 0.7;
+    }
+    
+    /* Individual bokeh elements with different colors and positions */
+    bokeh:nth-child(1) { background-color: #F38181; transform: translate(10vw, 20vh); animation-duration: 3.5s; animation-delay: -1s; }
+    bokeh:nth-child(2) { background-color: #FCE38A; transform: translate(30vw, 50vh); animation-duration: 4s; animation-delay: -2s; }
+    bokeh:nth-child(3) { background-color: #EAFFD0; transform: translate(70vw, 30vh); animation-duration: 3s; animation-delay: -3s; }
+    bokeh:nth-child(4) { background-color: #95E1D3; transform: translate(50vw, 70vh); animation-duration: 4.5s; animation-delay: -1.5s; }
+    bokeh:nth-child(5) { background-color: #F38181; transform: translate(80vw, 60vh); animation-duration: 3.2s; animation-delay: -2.5s; }
+    bokeh:nth-child(6) { background-color: #FCE38A; transform: translate(20vw, 80vh); animation-duration: 4.2s; animation-delay: -0.5s; }
+    bokeh:nth-child(7) { background-color: #EAFFD0; transform: translate(40vw, 10vh); animation-duration: 3.8s; animation-delay: -1.8s; }
+    bokeh:nth-child(8) { background-color: #95E1D3; transform: translate(60vw, 40vh); animation-duration: 4.7s; animation-delay: -3.2s; }
+    bokeh:nth-child(9) { background-color: #F38181; transform: translate(90vw, 20vh); animation-duration: 3.1s; animation-delay: -2.1s; }
+    bokeh:nth-child(10) { background-color: #FCE38A; transform: translate(15vw, 65vh); animation-duration: 4.3s; animation-delay: -1.3s; }
+    
+    @keyframes explosion {
+      0% { opacity: 0; }
+      70% { opacity: 1; }
+      100% { transform: translate(50vw, 50vh); }
+    }
+  </style>
+</head>
+<body>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+  <bokeh></bokeh>
+
+  <div class="card">
+    <div class="card-content">
+      <h1>Happy Friendship Day 🎉</h1>
+      <p class="related">🌟 To all my friends 🌟</p>
+      <p><small>by <a href="https://github.com/yusufsyed24" target="_blank">Syed Yusuf Hussaini</a> </small></p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var card = $(".card");
+    $(document).on("mousemove",function(e) {  
+      var ax = -($(window).innerWidth()/2- e.pageX)/20;
+      var ay = ($(window).innerHeight()/2- e.pageY)/10;
+      card.attr("style", "transform: rotateY("+ax+"deg) rotateX("+ay+"deg) translateZ(7em)");
+    });
+  </script>
+</body>
+</html>
